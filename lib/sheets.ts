@@ -1,15 +1,40 @@
 import { google } from "googleapis";
 
-function getCredentials() {
-  const clientEmail = process.env.GOOGLE_SHEETS_CLIENT_EMAIL;
-  const privateKey = process.env.GOOGLE_SHEETS_PRIVATE_KEY?.replace(/\\n/g, "\n");
-  const sheetId = process.env.GOOGLE_SHEETS_SHEET_ID;
+function normalizePrivateKey(raw: string) {
+  let key = raw.trim();
 
-  if (!clientEmail || !privateKey || !sheetId) {
+  // Alguém pode colar o valor inteiro do JSON, aspas incluídas, por engano.
+  if (key.startsWith('"') && key.endsWith('"')) {
+    key = key.slice(1, -1);
+  }
+
+  // O valor no JSON usa \n literais (barra + n) para as quebras de linha internas da
+  // chave; painéis de variáveis de ambiente às vezes preservam isso como texto puro.
+  key = key.replace(/\\n/g, "\n").trim();
+
+  if (!key.includes("BEGIN PRIVATE KEY") || !key.includes("END PRIVATE KEY")) {
+    throw new Error(
+      "GOOGLE_SHEETS_PRIVATE_KEY não parece ser uma chave privada válida (faltam os marcadores " +
+        "-----BEGIN PRIVATE KEY----- / -----END PRIVATE KEY-----). Copie de novo o valor do " +
+        'campo "private_key" do JSON da conta de serviço, sem as aspas ao redor.'
+    );
+  }
+
+  return key;
+}
+
+function getCredentials() {
+  const clientEmail = process.env.GOOGLE_SHEETS_CLIENT_EMAIL?.trim();
+  const privateKeyRaw = process.env.GOOGLE_SHEETS_PRIVATE_KEY;
+  const sheetId = process.env.GOOGLE_SHEETS_SHEET_ID?.trim();
+
+  if (!clientEmail || !privateKeyRaw || !sheetId) {
     throw new Error(
       "Configuração do Google Sheets ausente. Defina GOOGLE_SHEETS_CLIENT_EMAIL, GOOGLE_SHEETS_PRIVATE_KEY e GOOGLE_SHEETS_SHEET_ID."
     );
   }
+
+  const privateKey = normalizePrivateKey(privateKeyRaw);
 
   return { clientEmail, privateKey, sheetId };
 }
