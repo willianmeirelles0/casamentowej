@@ -14,11 +14,7 @@ function getCredentials() {
   return { clientEmail, privateKey, sheetId };
 }
 
-/**
- * Appends a single row to the given tab of the wedding's Google Sheet, using a service
- * account. The sheet must be shared with the service account's email as an Editor.
- */
-export async function appendRow(sheetTabName: string, values: (string | number)[]) {
+function getSheetsClient() {
   const { clientEmail, privateKey, sheetId } = getCredentials();
 
   const auth = new google.auth.JWT({
@@ -27,7 +23,15 @@ export async function appendRow(sheetTabName: string, values: (string | number)[
     scopes: ["https://www.googleapis.com/auth/spreadsheets"],
   });
 
-  const sheets = google.sheets({ version: "v4", auth });
+  return { sheets: google.sheets({ version: "v4", auth }), sheetId };
+}
+
+/**
+ * Appends a single row to the given tab of the wedding's Google Sheet, using a service
+ * account. The sheet must be shared with the service account's email as an Editor.
+ */
+export async function appendRow(sheetTabName: string, values: (string | number)[]) {
+  const { sheets, sheetId } = getSheetsClient();
 
   await sheets.spreadsheets.values.append({
     spreadsheetId: sheetId,
@@ -38,4 +42,20 @@ export async function appendRow(sheetTabName: string, values: (string | number)[
       values: [values],
     },
   });
+}
+
+/**
+ * Reads all rows (excluding the header row) from the given tab of the wedding's Google
+ * Sheet.
+ */
+export async function readRows(sheetTabName: string): Promise<string[][]> {
+  const { sheets, sheetId } = getSheetsClient();
+
+  const res = await sheets.spreadsheets.values.get({
+    spreadsheetId: sheetId,
+    range: `${sheetTabName}!A:Z`,
+  });
+
+  const rows = res.data.values ?? [];
+  return rows.slice(1).map((row) => row.map((cell) => String(cell ?? "")));
 }

@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import BranchDivider from "@/components/icons/BranchDivider";
 import Reveal from "@/components/Reveal";
+import type { Guest } from "@/app/api/guests/route";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
@@ -10,6 +11,47 @@ export default function RsvpForm() {
   const [attending, setAttending] = useState<"sim" | "nao">("sim");
   const [status, setStatus] = useState<Status>("idle");
   const [errorMessage, setErrorMessage] = useState("");
+
+  const [guests, setGuests] = useState<Guest[]>([]);
+  const [fullNameInput, setFullNameInput] = useState("");
+  const [matchedGuest, setMatchedGuest] = useState<Guest | null>(null);
+  const [selectedCompanions, setSelectedCompanions] = useState<string[]>([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+
+  useEffect(() => {
+    fetch("/api/guests")
+      .then((res) => (res.ok ? res.json() : { guests: [] }))
+      .then((data) => setGuests(data.guests ?? []))
+      .catch(() => setGuests([]));
+  }, []);
+
+  const suggestions =
+    fullNameInput.trim().length > 0 && !matchedGuest
+      ? guests
+          .filter((g) => g.name.toLowerCase().includes(fullNameInput.trim().toLowerCase()))
+          .slice(0, 6)
+      : [];
+
+  function handleNameChange(value: string) {
+    setFullNameInput(value);
+    if (matchedGuest && value !== matchedGuest.name) {
+      setMatchedGuest(null);
+      setSelectedCompanions([]);
+    }
+  }
+
+  function handleSelectGuest(guest: Guest) {
+    setFullNameInput(guest.name);
+    setMatchedGuest(guest);
+    setSelectedCompanions([]);
+    setShowSuggestions(false);
+  }
+
+  function toggleCompanion(companion: string) {
+    setSelectedCompanions((prev) =>
+      prev.includes(companion) ? prev.filter((c) => c !== companion) : [...prev, companion]
+    );
+  }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -19,11 +61,23 @@ export default function RsvpForm() {
     const form = event.currentTarget;
     const formData = new FormData(form);
 
+    const usesGuestList = attending === "sim" && matchedGuest !== null;
+
     const payload = {
-      fullName: String(formData.get("fullName") ?? ""),
+      fullName: fullNameInput.trim(),
       attending,
-      guestCount: attending === "sim" ? Number(formData.get("guestCount") ?? 0) : 0,
-      guestNames: attending === "sim" ? String(formData.get("guestNames") ?? "") : "",
+      guestCount:
+        attending === "sim"
+          ? usesGuestList
+            ? selectedCompanions.length
+            : Number(formData.get("guestCount") ?? 0)
+          : 0,
+      guestNames:
+        attending === "sim"
+          ? usesGuestList
+            ? selectedCompanions.join(", ")
+            : String(formData.get("guestNames") ?? "")
+          : "",
       dietaryRestriction:
         attending === "sim" ? String(formData.get("dietaryRestriction") ?? "") : "",
       message: String(formData.get("message") ?? ""),
@@ -41,6 +95,9 @@ export default function RsvpForm() {
       setStatus("success");
       form.reset();
       setAttending("sim");
+      setFullNameInput("");
+      setMatchedGuest(null);
+      setSelectedCompanions([]);
     } catch (err) {
       setStatus("error");
       setErrorMessage(err instanceof Error ? err.message : "Erro ao enviar confirmação.");
@@ -70,7 +127,7 @@ export default function RsvpForm() {
 
       <Reveal delayMs={100}>
         <form onSubmit={handleSubmit} className="mt-10 flex flex-col gap-6">
-          <div className="flex flex-col gap-2">
+          <div className="relative flex flex-col gap-2">
             <label htmlFor="fullName" className="font-sans text-sm font-medium text-brown-dark">
               Nome completo *
             </label>
@@ -79,8 +136,29 @@ export default function RsvpForm() {
               name="fullName"
               type="text"
               required
+              autoComplete="off"
+              value={fullNameInput}
+              onChange={(e) => handleNameChange(e.target.value)}
+              onFocus={() => setShowSuggestions(true)}
+              onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
               className="rounded-lg border border-gold/40 bg-white/70 px-4 py-2.5 font-sans text-brown-dark outline-none focus:border-gold"
             />
+            {showSuggestions && suggestions.length > 0 && (
+              <ul className="absolute left-0 right-0 top-full z-10 mt-1 overflow-hidden rounded-lg border border-gold/40 bg-white shadow-lg">
+                {suggestions.map((guest) => (
+                  <li key={guest.name}>
+                    <button
+                      type="button"
+                      onMouseDown={(e) => e.preventDefault()}
+                      onClick={() => handleSelectGuest(guest)}
+                      className="w-full px-4 py-2.5 text-left font-sans text-sm text-brown-dark hover:bg-gold/10"
+                    >
+                      {guest.name}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
 
           <fieldset className="flex flex-col gap-2">
@@ -111,32 +189,60 @@ export default function RsvpForm() {
 
           {attending === "sim" && (
             <>
-              <div className="flex flex-col gap-2">
-                <label htmlFor="guestCount" className="font-sans text-sm font-medium text-brown-dark">
-                  Quantidade de acompanhantes
-                </label>
-                <input
-                  id="guestCount"
-                  name="guestCount"
-                  type="number"
-                  min={0}
-                  defaultValue={0}
-                  className="rounded-lg border border-gold/40 bg-white/70 px-4 py-2.5 font-sans text-brown-dark outline-none focus:border-gold"
-                />
-              </div>
+              {matchedGuest ? (
+                matchedGuest.companions.length > 0 && (
+                  <fieldset className="flex flex-col gap-2">
+                    <legend className="font-sans text-sm font-medium text-brown-dark">
+                      Acompanhantes
+                    </legend>
+                    <div className="flex flex-col gap-2">
+                      {matchedGuest.companions.map((companion) => (
+                        <label
+                          key={companion}
+                          className="flex cursor-pointer items-center gap-3 rounded-lg border border-gold/40 bg-white/70 px-4 py-2.5 font-sans text-sm text-brown-dark"
+                        >
+                          <input
+                            type="checkbox"
+                            checked={selectedCompanions.includes(companion)}
+                            onChange={() => toggleCompanion(companion)}
+                            className="h-4 w-4 accent-gold"
+                          />
+                          {companion}
+                        </label>
+                      ))}
+                    </div>
+                  </fieldset>
+                )
+              ) : (
+                <>
+                  <div className="flex flex-col gap-2">
+                    <label htmlFor="guestCount" className="font-sans text-sm font-medium text-brown-dark">
+                      Quantidade de acompanhantes
+                    </label>
+                    <input
+                      id="guestCount"
+                      name="guestCount"
+                      type="number"
+                      min={0}
+                      defaultValue={0}
+                      className="rounded-lg border border-gold/40 bg-white/70 px-4 py-2.5 font-sans text-brown-dark outline-none focus:border-gold"
+                    />
+                  </div>
 
-              <div className="flex flex-col gap-2">
-                <label htmlFor="guestNames" className="font-sans text-sm font-medium text-brown-dark">
-                  Nome dos acompanhantes (opcional)
-                </label>
-                <input
-                  id="guestNames"
-                  name="guestNames"
-                  type="text"
-                  placeholder="Ex.: Maria Silva, João Silva"
-                  className="rounded-lg border border-gold/40 bg-white/70 px-4 py-2.5 font-sans text-brown-dark outline-none focus:border-gold"
-                />
-              </div>
+                  <div className="flex flex-col gap-2">
+                    <label htmlFor="guestNames" className="font-sans text-sm font-medium text-brown-dark">
+                      Nome dos acompanhantes (opcional)
+                    </label>
+                    <input
+                      id="guestNames"
+                      name="guestNames"
+                      type="text"
+                      placeholder="Ex.: Maria Silva, João Silva"
+                      className="rounded-lg border border-gold/40 bg-white/70 px-4 py-2.5 font-sans text-brown-dark outline-none focus:border-gold"
+                    />
+                  </div>
+                </>
+              )}
 
               <div className="flex flex-col gap-2">
                 <label htmlFor="dietaryRestriction" className="font-sans text-sm font-medium text-brown-dark">

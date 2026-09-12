@@ -54,9 +54,9 @@ GOOGLE_SHEETS_SHEET_ID=
    `private_key` para `GOOGLE_SHEETS_PRIVATE_KEY`. Como a chave privada tem quebras de linha,
    ao colar no painel da Vercel deixe o valor com `\n` literais (a aplicação já converte
    `\n` de volta em quebras de linha reais).
-4. Crie uma planilha no Google Sheets com duas abas: `RSVP` e `Presentes` (os nomes exatos
-   importam). Compartilhe a planilha com o e-mail da conta de serviço, dando permissão de
-   **Editor**.
+4. Crie uma planilha no Google Sheets com três abas: `RSVP`, `Presentes` e `Convidados` (os
+   nomes exatos importam). Compartilhe a planilha com o e-mail da conta de serviço, dando
+   permissão de **Editor**.
 5. Copie o ID da planilha (o trecho da URL entre `/d/` e `/edit`) para
    `GOOGLE_SHEETS_SHEET_ID`.
 
@@ -66,6 +66,26 @@ alimentar e mensagem. Cada clique em "Já presenteei" tenta gravar uma linha ext
 `Presentes` (data/hora, nome do presente, valor, nome de quem presenteou, se informado); essa
 gravação é apenas um reforço, a marcação principal do presente como "dado" já funciona via
 `localStorage` no navegador do convidado mesmo se o Sheets falhar.
+
+### Lista de convidados (autocomplete no RSVP)
+
+A aba `Convidados` alimenta o autocomplete do campo "Nome completo" no formulário de RSVP.
+Tem duas colunas, sem cabeçalho especial (a primeira linha é ignorada, pode ser um título):
+
+| Nome              | Acompanhantes                |
+|-------------------|-------------------------------|
+| Larisse Fontana   | Flávio Fontana                |
+| Flávio Fontana    | Larisse Fontana                |
+| Marcos Andrioli   | (deixe vazio se não tiver)     |
+
+Ao digitar o nome, o convidado aparece numa lista de sugestões; ao clicar, o campo
+"Acompanhantes" vira uma lista de seleção múltipla só com os nomes cadastrados na coluna
+`Acompanhantes` daquela linha (separados por vírgula, se houver mais de um). Se a linha não
+tiver ninguém na coluna `Acompanhantes`, essa opção simplesmente não aparece para essa
+pessoa. Quem digitar um nome que não está na lista continua vendo os campos antigos
+(quantidade + nome dos acompanhantes em texto livre), então convidados fora da lista não
+ficam travados. Vocês podem editar essa aba a qualquer momento, direto no Google Sheets; a
+lista é buscada pelo site a cada poucos minutos (cache de 5 minutos).
 
 ### Como configurar o Pix
 
