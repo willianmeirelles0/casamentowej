@@ -75,18 +75,22 @@ presente usando a biblioteca [`pix-utils`](https://www.npmjs.com/package/pix-uti
 renderiza no navegador com [`qrcode.react`](https://www.npmjs.com/package/qrcode.react). Não
 há integração com gateway de pagamento nem cobrança de taxas.
 
-## Fotos do casal e dos locais
+## Fotos e vídeo
 
-O projeto não inclui fotos reais (não fornecidas no momento da criação do site). No lugar da
-foto do casal, da igreja e do restaurante, há placeholders ilustrados em aquarela/CSS que já
-seguem a identidade visual do site:
+- **Hero**: `public/images/hero-aquarela.jpg`, a arte de Save the Date do casal.
+- **Nossa história**: carrossel com 26 fotos do casal em `public/images/casal/` (lista gerada
+  em `lib/gallery.ts`), a foto `public/images/pedido-de-namoro.jpg` para "O pedido de
+  namoro", e um vídeo do YouTube (Shorts) incorporado para "O pedido de casamento"
+  (`components/OurStory.tsx`, constante `PROPOSAL_VIDEO_ID`).
+- As fotos originais chegaram em `.HEIC`/`.heic` (fotos de iPhone) e foram convertidas para
+  `.jpg` e redimensionadas antes de entrar em `public/images`, pois `.HEIC` não é exibido
+  pela maioria dos navegadores.
 
-- `components/HeroBackground.tsx`: fundo da hero (campo de girassóis estilizado)
-- `components/PhotoFrame.tsx`: usado nas molduras de "Nossa história" e nos cards de local
-
-Para usar fotos reais, adicione os arquivos em `public/images/` e troque o `PhotoFrame`
-correspondente por um `next/image` apontando para o arquivo, mantendo a classe
-`watercolor-frame` para preservar a borda irregular.
+A igreja e o restaurante (seção "Local") ainda usam placeholders ilustrados em aquarela/CSS
+(`components/PhotoFrame.tsx`), pois não há fotos desses locais no repositório. Para usar fotos
+reais ali, adicione os arquivos em `public/images/` e troque o `PhotoFrame` correspondente em
+`components/LocationSection.tsx` por um `FramedImage` (`components/FramedImage.tsx`), que já
+usa `next/image` mantendo a moldura aquarelada.
 
 ## Conteúdo a revisar antes de publicar
 

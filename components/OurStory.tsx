@@ -1,6 +1,11 @@
 import BranchDivider from "@/components/icons/BranchDivider";
-import PhotoFrame from "@/components/PhotoFrame";
+import FramedImage from "@/components/FramedImage";
+import PhotoCarousel from "@/components/PhotoCarousel";
 import Reveal from "@/components/Reveal";
+import YouTubeEmbed from "@/components/YouTubeEmbed";
+import { COUPLE_GALLERY } from "@/lib/gallery";
+
+const PROPOSAL_VIDEO_ID = "zSEhNpHGfhI";
 
 export default function OurStory() {
   return (
@@ -11,10 +16,25 @@ export default function OurStory() {
       </Reveal>
 
       <div className="mt-14 grid gap-12 lg:grid-cols-[1.1fr_1fr] lg:items-center">
-        <Reveal className="order-2 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:order-1">
-          <PhotoFrame label="Jéssica &amp; Willian" className="col-span-2 sm:col-span-2" />
-          <PhotoFrame label="O pedido de namoro" className="hidden sm:flex" />
-          <PhotoFrame label="O pedido de casamento" className="sm:col-span-1" />
+        <Reveal className="order-2 grid grid-cols-1 items-start gap-4 sm:grid-cols-3 lg:order-1">
+          <figure className="flex flex-col gap-2 sm:col-span-2">
+            <PhotoCarousel images={COUPLE_GALLERY} alt="Jéssica e Willian" />
+            <figcaption className="text-center font-script text-lg text-gold">
+              Jéssica &amp; Willian
+            </figcaption>
+          </figure>
+          <figure className="flex flex-col gap-2">
+            <FramedImage src="/images/pedido-de-namoro.jpg" alt="O pedido de namoro" />
+            <figcaption className="text-center font-script text-lg text-gold">
+              O pedido de namoro
+            </figcaption>
+          </figure>
+          <figure className="flex flex-col gap-2">
+            <YouTubeEmbed videoId={PROPOSAL_VIDEO_ID} title="O pedido de casamento" />
+            <figcaption className="text-center font-script text-lg text-gold">
+              O pedido de casamento
+            </figcaption>
+          </figure>
         </Reveal>
 
         <Reveal delayMs={120} className="order-1 space-y-5 font-sans text-base leading-relaxed text-brown-dark sm:text-lg lg:order-2">
