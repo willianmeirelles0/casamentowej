@@ -77,7 +77,13 @@ há integração com gateway de pagamento nem cobrança de taxas.
 
 ## Fotos e vídeo
 
-- **Hero**: `public/images/hero-aquarela.jpg`, a arte de Save the Date do casal.
+- **Hero**: `public/images/hero-aquarela.jpg`, a arte de Save the Date do casal. O container
+  usa proporção fixa **2:1** (`aspect-[2/1]` em `components/Hero.tsx`), então para a imagem
+  aparecer inteira, sem corte automático, exporte a arte nessa proporção (ex: 2000x1000px,
+  1800x900px, ou qualquer múltiplo de 2:1). Uma proporção mais "quadrada" (como a usada nas
+  versões anteriores desse arquivo, ~1.3:1) fica alta demais quando esticada em 100% da
+  largura da tela em notebooks comuns, empurrando o contador regressivo para fora da tela
+  inicial.
 - **Nossa história**: carrossel com 26 fotos do casal em `public/images/casal/` (lista gerada
   em `lib/gallery.ts`), a foto `public/images/pedido-de-namoro.jpg` para "O pedido de
   namoro", e um vídeo do YouTube (Shorts) incorporado para "O pedido de casamento"

@@ -7,14 +7,16 @@ export default function Hero() {
       id="topo"
       className="relative flex min-h-[100svh] flex-col items-center justify-center gap-8 overflow-hidden py-14 text-center sm:gap-10 sm:py-20"
     >
-      <div className="relative h-[50svh] w-full sm:h-[56svh] lg:h-[62svh]">
+      {/* A arte deve ter proporção 2:1 (ex: 2000x1000px). Nessa proporção a imagem
+          aparece inteira, sem corte; ver README para detalhes. */}
+      <div className="relative aspect-[2/1] w-full">
         <Image
           src="/images/hero-aquarela.jpg"
           alt="Save the date: Jéssica Andrioli e Willian Meirelles, 24 de abril de 2027"
           fill
           priority
           sizes="100vw"
-          className="object-cover [object-position:50%_88%]"
+          className="object-cover"
         />
       </div>
 
