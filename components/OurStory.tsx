@@ -16,25 +16,32 @@ export default function OurStory() {
       </Reveal>
 
       <div className="mt-14 grid gap-12 lg:grid-cols-[1.1fr_1fr] lg:items-center">
-        <Reveal className="order-2 grid grid-cols-1 items-start gap-4 sm:grid-cols-3 lg:order-1">
-          <figure className="flex flex-col gap-2 sm:col-span-2">
-            <PhotoCarousel images={COUPLE_GALLERY} alt="Jéssica e Willian" />
+        <Reveal className="order-2 flex flex-col gap-4 sm:flex-row lg:order-1">
+          <figure className="flex flex-col gap-2 sm:w-2/3">
+            <PhotoCarousel
+              images={COUPLE_GALLERY}
+              alt="Jéssica e Willian"
+              className="flex-1 sm:aspect-auto"
+            />
             <figcaption className="text-center font-script text-lg text-gold">
               Jéssica &amp; Willian
             </figcaption>
           </figure>
-          <figure className="flex flex-col gap-2">
-            <FramedImage src="/images/pedido-de-namoro.jpg" alt="O pedido de namoro" />
-            <figcaption className="text-center font-script text-lg text-gold">
-              O pedido de namoro
-            </figcaption>
-          </figure>
-          <figure className="flex flex-col gap-2">
-            <YouTubeEmbed videoId={PROPOSAL_VIDEO_ID} title="O pedido de casamento" />
-            <figcaption className="text-center font-script text-lg text-gold">
-              O pedido de casamento
-            </figcaption>
-          </figure>
+
+          <div className="flex flex-col gap-4 sm:w-1/3">
+            <figure className="flex flex-col gap-2">
+              <FramedImage src="/images/pedido-de-namoro.jpg" alt="O pedido de namoro" />
+              <figcaption className="text-center font-script text-lg text-gold">
+                O pedido de namoro
+              </figcaption>
+            </figure>
+            <figure className="flex flex-col gap-2">
+              <YouTubeEmbed videoId={PROPOSAL_VIDEO_ID} title="O pedido de casamento" />
+              <figcaption className="text-center font-script text-lg text-gold">
+                O pedido de casamento
+              </figcaption>
+            </figure>
+          </div>
         </Reveal>
 
         <Reveal delayMs={120} className="order-1 space-y-5 font-sans text-base leading-relaxed text-brown-dark sm:text-lg lg:order-2">

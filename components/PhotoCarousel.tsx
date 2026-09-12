@@ -34,7 +34,7 @@ export default function PhotoCarousel({
   }
 
   return (
-    <div className={`watercolor-frame relative aspect-[4/5] overflow-hidden bg-cream-dark ${className}`}>
+    <div className={`watercolor-frame relative aspect-[4/5] min-h-64 overflow-hidden bg-cream-dark ${className}`}>
       <Image
         key={images[index]}
         src={images[index]}

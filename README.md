@@ -91,6 +91,13 @@ há integração com gateway de pagamento nem cobrança de taxas.
 - As fotos originais chegaram em `.HEIC`/`.heic` (fotos de iPhone) e foram convertidas para
   `.jpg` e redimensionadas antes de entrar em `public/images`, pois `.HEIC` não é exibido
   pela maioria dos navegadores.
+- **O grande dia**: dois painéis lado a lado (cerimônia/festa) com foto de fundo, sem gap
+  entre eles (`components/BigDay.tsx`, componente `EventPanel`). Cada painel usa
+  `aspect-[3/4]` (retrato); recomenda-se exportar cada foto em **3:4**, por exemplo
+  **1200x1600px**, para preencher bem o painel via `object-cover`/`background-size: cover`
+  sem sobrar nem faltar muito. Ainda são placeholders em gradiente; para usar fotos reais,
+  adicione os arquivos em `public/images/grande-dia/` e passe a prop `bgImage` para cada
+  `EventPanel` em `BigDay.tsx`.
 
 A igreja e o restaurante (seção "Local") ainda usam placeholders ilustrados em aquarela/CSS
 (`components/PhotoFrame.tsx`), pois não há fotos desses locais no repositório. Para usar fotos

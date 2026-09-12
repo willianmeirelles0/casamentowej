@@ -19,11 +19,18 @@ export async function POST(request: NextRequest) {
 
   const fullName = body.fullName?.trim();
   const attending = body.attending;
-  const dietaryRestriction = body.dietaryRestriction?.trim();
+  const dietaryRestriction = body.dietaryRestriction?.trim() ?? "";
 
-  if (!fullName || (attending !== "sim" && attending !== "nao") || !dietaryRestriction) {
+  if (!fullName || (attending !== "sim" && attending !== "nao")) {
     return NextResponse.json(
-      { error: "Preencha nome completo, presença e restrição alimentar." },
+      { error: "Preencha nome completo e se vai comparecer." },
+      { status: 400 }
+    );
+  }
+
+  if (attending === "sim" && !dietaryRestriction) {
+    return NextResponse.json(
+      { error: "Preencha a restrição alimentar." },
       { status: 400 }
     );
   }
@@ -37,7 +44,7 @@ export async function POST(request: NextRequest) {
       attending === "sim" ? "Sim" : "Não",
       guestCount,
       body.guestNames?.trim() ?? "",
-      dietaryRestriction,
+      attending === "sim" ? dietaryRestriction : "Não comparecerá",
       body.message?.trim() ?? "",
     ]);
 

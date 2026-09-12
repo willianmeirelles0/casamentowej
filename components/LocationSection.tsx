@@ -21,9 +21,9 @@ type VenueCardProps = {
 
 function VenueCard({ title, venueName, address, reference, mapQuery, icon, photoLabel }: VenueCardProps) {
   return (
-    <div className="flex flex-col overflow-hidden rounded-2xl border border-gold/30 bg-cream">
+    <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-gold/30 bg-cream">
       <PhotoFrame label={photoLabel} icon={icon} className="aspect-[16/10] rounded-none" />
-      <div className="flex flex-col gap-3 p-6 sm:p-8">
+      <div className="flex flex-1 flex-col gap-3 p-6 sm:p-8">
         <p className="font-script text-2xl text-gold">{title}</p>
         <p className="font-serif text-xl font-semibold text-brown-dark">{venueName}</p>
         <p className="flex items-start gap-2 font-sans text-sm text-brown-dark/90">
@@ -38,12 +38,11 @@ function VenueCard({ title, venueName, address, reference, mapQuery, icon, photo
             ) : null}
           </span>
         </p>
-        <div className="mt-2 overflow-hidden rounded-xl border border-gold/20">
+        <div className="mt-2 min-h-[230px] flex-1 overflow-hidden rounded-xl border border-gold/20">
           <iframe
             title={`Mapa: ${venueName}`}
             src={mapEmbedSrc(mapQuery)}
-            width="100%"
-            height="230"
+            className="h-full w-full"
             style={{ border: 0 }}
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
@@ -63,7 +62,7 @@ export default function LocationSection() {
       </Reveal>
 
       <div className="mt-14 grid gap-8 md:grid-cols-2">
-        <Reveal>
+        <Reveal className="h-full">
           <VenueCard
             title="Cerimônia"
             venueName={CEREMONY.venueName}
@@ -73,7 +72,7 @@ export default function LocationSection() {
             photoLabel="Igreja São Bento"
           />
         </Reveal>
-        <Reveal delayMs={120}>
+        <Reveal delayMs={120} className="h-full">
           <VenueCard
             title="Recepção"
             venueName={RECEPTION.venueName}

@@ -22,9 +22,10 @@ export default function RsvpForm() {
     const payload = {
       fullName: String(formData.get("fullName") ?? ""),
       attending,
-      guestCount: Number(formData.get("guestCount") ?? 0),
-      guestNames: String(formData.get("guestNames") ?? ""),
-      dietaryRestriction: String(formData.get("dietaryRestriction") ?? ""),
+      guestCount: attending === "sim" ? Number(formData.get("guestCount") ?? 0) : 0,
+      guestNames: attending === "sim" ? String(formData.get("guestNames") ?? "") : "",
+      dietaryRestriction:
+        attending === "sim" ? String(formData.get("dietaryRestriction") ?? "") : "",
       message: String(formData.get("message") ?? ""),
     };
 
@@ -136,22 +137,22 @@ export default function RsvpForm() {
                   className="rounded-lg border border-gold/40 bg-white/70 px-4 py-2.5 font-sans text-brown-dark outline-none focus:border-gold"
                 />
               </div>
+
+              <div className="flex flex-col gap-2">
+                <label htmlFor="dietaryRestriction" className="font-sans text-sm font-medium text-brown-dark">
+                  Restrição alimentar *
+                </label>
+                <input
+                  id="dietaryRestriction"
+                  name="dietaryRestriction"
+                  type="text"
+                  required={attending === "sim"}
+                  placeholder="Se não houver, digite &quot;Nenhuma&quot;"
+                  className="rounded-lg border border-gold/40 bg-white/70 px-4 py-2.5 font-sans text-brown-dark outline-none focus:border-gold"
+                />
+              </div>
             </>
           )}
-
-          <div className="flex flex-col gap-2">
-            <label htmlFor="dietaryRestriction" className="font-sans text-sm font-medium text-brown-dark">
-              Restrição alimentar *
-            </label>
-            <input
-              id="dietaryRestriction"
-              name="dietaryRestriction"
-              type="text"
-              required
-              placeholder="Se não houver, digite &quot;Nenhuma&quot;"
-              className="rounded-lg border border-gold/40 bg-white/70 px-4 py-2.5 font-sans text-brown-dark outline-none focus:border-gold"
-            />
-          </div>
 
           <div className="flex flex-col gap-2">
             <label htmlFor="message" className="font-sans text-sm font-medium text-brown-dark">
