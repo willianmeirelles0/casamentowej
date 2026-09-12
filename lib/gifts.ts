@@ -4,6 +4,7 @@ export type Gift = {
   name: string;
   description: string;
   price: number;
+  image?: string;
 };
 
 export const GIFTS: Gift[] = [
@@ -62,5 +63,6 @@ export const GIFTS: Gift[] = [
     name: "Sociedade Vitalícia da Lua de Mel",
     description: "Torne se sócio oficial da viagem dos noivos.",
     price: 1000,
+    image: "/images/gifts/lua-de-mel.jpg",
   },
 ];

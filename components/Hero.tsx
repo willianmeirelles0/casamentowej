@@ -5,17 +5,16 @@ export default function Hero() {
   return (
     <section
       id="topo"
-      className="relative flex min-h-[100svh] flex-col items-center justify-center gap-10 overflow-hidden py-16 text-center sm:py-20"
+      className="relative flex min-h-[100svh] flex-col items-center justify-center gap-8 overflow-hidden py-14 text-center sm:gap-10 sm:py-20"
     >
-      <div className="relative w-full">
+      <div className="relative h-[50svh] w-full sm:h-[56svh] lg:h-[62svh]">
         <Image
           src="/images/hero-aquarela.jpg"
           alt="Save the date: Jéssica Andrioli e Willian Meirelles, 24 de abril de 2027"
-          width={1240}
-          height={941}
+          fill
           priority
           sizes="100vw"
-          className="h-auto w-full"
+          className="object-cover [object-position:50%_88%]"
         />
       </div>
 

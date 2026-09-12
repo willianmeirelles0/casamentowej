@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { QRCodeSVG } from "qrcode.react";
 import type { Gift } from "@/lib/gifts";
 
@@ -72,6 +73,17 @@ export default function GiftCard({ gift, given, onMarkGiven }: GiftCardProps) {
       }`}
     >
       <div>
+        {gift.image && (
+          <div className="relative -mx-6 -mt-6 mb-4 h-28 overflow-hidden rounded-t-2xl sm:h-32">
+            <Image
+              src={gift.image}
+              alt=""
+              fill
+              sizes="(max-width: 640px) 90vw, 320px"
+              className="object-cover"
+            />
+          </div>
+        )}
         <p className="font-serif text-lg font-semibold leading-snug text-brown-dark">{gift.name}</p>
         <p className="mt-2 font-sans text-sm italic text-brown-dark/80">&ldquo;{gift.description}&rdquo;</p>
         <p className="mt-4 font-serif text-2xl font-semibold text-gold">{currency.format(gift.price)}</p>
