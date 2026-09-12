@@ -11,7 +11,7 @@ export default function Hero() {
         <Image
           src="/images/hero-aquarela.jpg"
           alt="Save the date: Jéssica Andrioli e Willian Meirelles, 24 de abril de 2027"
-          width={1291}
+          width={1240}
           height={941}
           priority
           sizes="100vw"
