@@ -20,9 +20,3 @@ export const RECEPTION = {
   mapQuery:
     "Casa da Serra Restaurante, Linha Palmeiro, 420, Rodovia VRS 855, Caminhos de Pedra, Bento Gonçalves, RS, 95714-000",
 };
-
-export const CONTACT = {
-  email: "jessicaewillian2027@gmail.com",
-  whatsapp: "+55 54 90000-0000",
-  whatsappHref: "https://wa.me/5554900000000",
-};

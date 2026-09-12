@@ -61,23 +61,11 @@ export default function RsvpForm() {
     const form = event.currentTarget;
     const formData = new FormData(form);
 
-    const usesGuestList = attending === "sim" && matchedGuest !== null;
-
     const payload = {
       fullName: fullNameInput.trim(),
       attending,
-      guestCount:
-        attending === "sim"
-          ? usesGuestList
-            ? selectedCompanions.length
-            : Number(formData.get("guestCount") ?? 0)
-          : 0,
-      guestNames:
-        attending === "sim"
-          ? usesGuestList
-            ? selectedCompanions.join(", ")
-            : String(formData.get("guestNames") ?? "")
-          : "",
+      guestCount: attending === "sim" ? selectedCompanions.length : 0,
+      guestNames: attending === "sim" ? selectedCompanions.join(", ") : "",
       dietaryRestriction:
         attending === "sim" ? String(formData.get("dietaryRestriction") ?? "") : "",
       message: String(formData.get("message") ?? ""),
@@ -129,7 +117,7 @@ export default function RsvpForm() {
         <form onSubmit={handleSubmit} className="mt-10 flex flex-col gap-6">
           <div className="relative flex flex-col gap-2">
             <label htmlFor="fullName" className="font-sans text-sm font-medium text-brown-dark">
-              Nome completo *
+              Nome completo*
             </label>
             <input
               id="fullName"
@@ -162,7 +150,7 @@ export default function RsvpForm() {
           </div>
 
           <fieldset className="flex flex-col gap-2">
-            <legend className="font-sans text-sm font-medium text-brown-dark">Vai comparecer? *</legend>
+            <legend className="font-sans text-sm font-medium text-brown-dark">Vai comparecer?*</legend>
             <div className="flex gap-4">
               {(["sim", "nao"] as const).map((option) => (
                 <label
@@ -189,64 +177,37 @@ export default function RsvpForm() {
 
           {attending === "sim" && (
             <>
-              {matchedGuest ? (
-                matchedGuest.companions.length > 0 && (
-                  <fieldset className="flex flex-col gap-2">
-                    <legend className="font-sans text-sm font-medium text-brown-dark">
-                      Acompanhantes
-                    </legend>
-                    <div className="flex flex-col gap-2">
-                      {matchedGuest.companions.map((companion) => (
-                        <label
-                          key={companion}
-                          className="flex cursor-pointer items-center gap-3 rounded-lg border border-gold/40 bg-white/70 px-4 py-2.5 font-sans text-sm text-brown-dark"
-                        >
-                          <input
-                            type="checkbox"
-                            checked={selectedCompanions.includes(companion)}
-                            onChange={() => toggleCompanion(companion)}
-                            className="h-4 w-4 accent-gold"
-                          />
-                          {companion}
-                        </label>
-                      ))}
-                    </div>
-                  </fieldset>
-                )
-              ) : (
-                <>
+              <fieldset className="flex flex-col gap-2">
+                <legend className="font-sans text-sm font-medium text-brown-dark">Acompanhantes</legend>
+                {matchedGuest && matchedGuest.companions.length > 0 ? (
                   <div className="flex flex-col gap-2">
-                    <label htmlFor="guestCount" className="font-sans text-sm font-medium text-brown-dark">
-                      Quantidade de acompanhantes
-                    </label>
-                    <input
-                      id="guestCount"
-                      name="guestCount"
-                      type="number"
-                      min={0}
-                      defaultValue={0}
-                      className="rounded-lg border border-gold/40 bg-white/70 px-4 py-2.5 font-sans text-brown-dark outline-none focus:border-gold"
-                    />
+                    {matchedGuest.companions.map((companion) => (
+                      <label
+                        key={companion}
+                        className="flex cursor-pointer items-center gap-3 rounded-lg border border-gold/40 bg-white/70 px-4 py-2.5 font-sans text-sm text-brown-dark"
+                      >
+                        <input
+                          type="checkbox"
+                          checked={selectedCompanions.includes(companion)}
+                          onChange={() => toggleCompanion(companion)}
+                          className="h-4 w-4 accent-gold"
+                        />
+                        {companion}
+                      </label>
+                    ))}
                   </div>
-
-                  <div className="flex flex-col gap-2">
-                    <label htmlFor="guestNames" className="font-sans text-sm font-medium text-brown-dark">
-                      Nome dos acompanhantes (opcional)
-                    </label>
-                    <input
-                      id="guestNames"
-                      name="guestNames"
-                      type="text"
-                      placeholder="Ex.: Maria Silva, João Silva"
-                      className="rounded-lg border border-gold/40 bg-white/70 px-4 py-2.5 font-sans text-brown-dark outline-none focus:border-gold"
-                    />
-                  </div>
-                </>
-              )}
+                ) : (
+                  <p className="rounded-lg border border-gold/20 bg-cream-dark/40 px-4 py-2.5 font-sans text-sm text-brown-dark/50">
+                    {matchedGuest
+                      ? "Nenhum acompanhante cadastrado para esse nome."
+                      : "Selecione seu nome acima para ver os acompanhantes disponíveis."}
+                  </p>
+                )}
+              </fieldset>
 
               <div className="flex flex-col gap-2">
                 <label htmlFor="dietaryRestriction" className="font-sans text-sm font-medium text-brown-dark">
-                  Restrição alimentar *
+                  Restrição alimentar*
                 </label>
                 <input
                   id="dietaryRestriction"
