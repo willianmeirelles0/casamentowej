@@ -6,8 +6,8 @@ export type Guest = {
   companions: string[];
 };
 
-// Evita bater no Google Sheets a cada visitante; a lista de convidados muda raramente.
-export const revalidate = 300;
+// Evita bater no Google Sheets a cada visitante, mas ainda pega alterações recentes rápido.
+export const revalidate = 30;
 
 export async function GET() {
   try {

@@ -34,6 +34,7 @@ export default function RsvpForm() {
 
   function handleNameChange(value: string) {
     setFullNameInput(value);
+    setShowSuggestions(true);
     if (matchedGuest && value !== matchedGuest.name) {
       setMatchedGuest(null);
       setSelectedCompanions([]);
