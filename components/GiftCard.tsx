@@ -80,7 +80,7 @@ export default function GiftCard({ gift, given, onMarkGiven }: GiftCardProps) {
               alt=""
               fill
               sizes="(max-width: 640px) 90vw, 320px"
-              className="object-cover object-top"
+              className="object-cover object-bottom"
             />
           </div>
         )}
