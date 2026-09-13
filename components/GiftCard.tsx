@@ -74,13 +74,13 @@ export default function GiftCard({ gift, given, onMarkGiven }: GiftCardProps) {
     >
       <div>
         {gift.image && (
-          <div className="relative -mx-6 -mt-6 mb-4 h-28 overflow-hidden rounded-t-2xl sm:h-32">
+          <div className="relative -mx-6 -mt-6 mb-4 h-36 overflow-hidden rounded-t-2xl sm:h-40">
             <Image
               src={gift.image}
               alt=""
               fill
               sizes="(max-width: 640px) 90vw, 320px"
-              className="object-cover"
+              className="object-cover object-top"
             />
           </div>
         )}

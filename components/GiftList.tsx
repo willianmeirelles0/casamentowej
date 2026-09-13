@@ -18,8 +18,7 @@ export default function GiftList() {
           <BranchDivider className="mt-3" />
           <p className="mx-auto mt-6 max-w-xl font-sans text-brown-dark/90">
             Sua presença já é o maior presente. Mas se quiser nos ajudar a começar essa nova
-            fase com o pé direito (e com bom humor), separamos algumas cotas especiais. Pix
-            direto, sem taxas.
+            fase com o pé direito (e com bom humor), separamos algumas cotas especiais.
           </p>
         </Reveal>
 

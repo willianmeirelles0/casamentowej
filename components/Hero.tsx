@@ -7,9 +7,10 @@ export default function Hero() {
       id="topo"
       className="relative flex min-h-[100svh] flex-col items-center justify-center gap-8 overflow-hidden py-14 text-center sm:gap-10 sm:py-20"
     >
-      {/* A arte deve ter proporção 2:1 (ex: 2000x1000px). Nessa proporção a imagem
-          aparece inteira, sem corte; ver README para detalhes. */}
-      <div className="relative aspect-[2/1] w-full">
+      {/* A arte deve ter proporção 2:1 (ex: 2000x1000px); é o que aparece inteira, sem
+          corte, em telas sm+ (ver README). No mobile a gente recorta um pouco (aspect
+          mais alto) para o conteúdo não ficar minúsculo numa faixa tão baixa. */}
+      <div className="relative aspect-[4/3] w-full sm:aspect-[2/1]">
         <Image
           src="/images/hero-aquarela.jpg"
           alt="Save the date: Jéssica Andrioli e Willian Meirelles, 24 de abril de 2027"
