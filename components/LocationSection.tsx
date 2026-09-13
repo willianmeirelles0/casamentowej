@@ -1,7 +1,6 @@
-import type { ReactNode } from "react";
 import BranchDivider from "@/components/icons/BranchDivider";
-import { ChurchIcon, MapPinIcon, PartyIcon } from "@/components/icons/EventIcons";
-import PhotoFrame from "@/components/PhotoFrame";
+import { MapPinIcon } from "@/components/icons/EventIcons";
+import FramedImage from "@/components/FramedImage";
 import Reveal from "@/components/Reveal";
 import { CEREMONY, RECEPTION } from "@/lib/wedding";
 
@@ -15,14 +14,13 @@ type VenueCardProps = {
   address: string;
   reference?: string;
   mapQuery: string;
-  icon: ReactNode;
-  photoLabel: string;
+  photo: string;
 };
 
-function VenueCard({ title, venueName, address, reference, mapQuery, icon, photoLabel }: VenueCardProps) {
+function VenueCard({ title, venueName, address, reference, mapQuery, photo }: VenueCardProps) {
   return (
     <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-gold/30 bg-cream">
-      <PhotoFrame label={photoLabel} icon={icon} className="aspect-[16/10] rounded-none" />
+      <FramedImage src={photo} alt={venueName} className="aspect-[16/10] rounded-none" />
       <div className="flex flex-1 flex-col gap-3 p-6 sm:p-8">
         <p className="font-script text-2xl text-gold">{title}</p>
         <p className="font-serif text-xl font-semibold text-brown-dark">{venueName}</p>
@@ -68,8 +66,7 @@ export default function LocationSection() {
             venueName={CEREMONY.venueName}
             address={CEREMONY.address}
             mapQuery={CEREMONY.mapQuery}
-            icon={<ChurchIcon className="h-10 w-10" />}
-            photoLabel="Igreja São Bento"
+            photo="/images/igreja-sao-bento.jpg"
           />
         </Reveal>
         <Reveal delayMs={120} className="h-full">
@@ -79,8 +76,7 @@ export default function LocationSection() {
             address={RECEPTION.address}
             reference={RECEPTION.reference}
             mapQuery={RECEPTION.mapQuery}
-            icon={<PartyIcon className="h-10 w-10" />}
-            photoLabel="Casa da Serra Restaurante"
+            photo="/images/casa-da-serra.jpg"
           />
         </Reveal>
       </div>

@@ -116,19 +116,14 @@ destacá-lo ocupando a largura toda do grid (como esse), adicione `featured: tru
 - As fotos originais chegaram em `.HEIC`/`.heic` (fotos de iPhone) e foram convertidas para
   `.jpg` e redimensionadas antes de entrar em `public/images`, pois `.HEIC` não é exibido
   pela maioria dos navegadores.
-- **O grande dia**: dois painéis lado a lado (cerimônia/festa) com foto de fundo, sem gap
-  entre eles (`components/BigDay.tsx`, componente `EventPanel`). Cada painel usa
-  `aspect-[3/4]` (retrato); recomenda-se exportar cada foto em **3:4**, por exemplo
-  **1200x1600px**, para preencher bem o painel via `object-cover`/`background-size: cover`
-  sem sobrar nem faltar muito. Ainda são placeholders em gradiente; para usar fotos reais,
-  adicione os arquivos em `public/images/grande-dia/` e passe a prop `bgImage` para cada
-  `EventPanel` em `BigDay.tsx`.
-
-A igreja e o restaurante (seção "Local") ainda usam placeholders ilustrados em aquarela/CSS
-(`components/PhotoFrame.tsx`), pois não há fotos desses locais no repositório. Para usar fotos
-reais ali, adicione os arquivos em `public/images/` e troque o `PhotoFrame` correspondente em
-`components/LocationSection.tsx` por um `FramedImage` (`components/FramedImage.tsx`), que já
-usa `next/image` mantendo a moldura aquarelada.
+- **O grande dia**: `public/images/grande-dia.jpg`, imagem única full-bleed (igreja e mesa da
+  recepção lado a lado, já um só arquivo) acima dos ícones de Cerimônia/Festa. Mesmo esquema
+  da Hero: proporção **2:1** em telas sm+ (`aspect-[2/1]`), recortada para **4:3** só no
+  mobile para não ficar minúscula numa faixa baixa (`components/BigDay.tsx`).
+- **Local**: `public/images/igreja-sao-bento.jpg` (Cerimônia) e `public/images/casa-da-serra.jpg`
+  (Recepção), cada uma num `FramedImage` (`components/LocationSection.tsx`) com proporção
+  16:10 (`aspect-[16/10]`); qualquer foto de paisagem funciona bem aí, sem exigir uma
+  proporção exata.
 
 ## Conteúdo a revisar antes de publicar
 
