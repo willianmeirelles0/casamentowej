@@ -95,6 +95,11 @@ presente usando a biblioteca [`pix-utils`](https://www.npmjs.com/package/pix-uti
 renderiza no navegador com [`qrcode.react`](https://www.npmjs.com/package/qrcode.react). Não
 há integração com gateway de pagamento nem cobrança de taxas.
 
+O presente "Pix da Intuição" (`lib/gifts.ts`, `price: null`) gera um Pix **sem valor fixo**:
+o campo de valor fica de fora do BR Code, então o convidado digita o quanto quiser enviar
+direto no aplicativo do banco. Para criar outro presente assim, basta usar `price: null`; para
+destacá-lo ocupando a largura toda do grid (como esse), adicione `featured: true`.
+
 ## Fotos e vídeo
 
 - **Hero**: `public/images/hero-aquarela.jpg`, a arte de Save the Date do casal. O container

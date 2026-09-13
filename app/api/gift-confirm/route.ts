@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
     await appendRow("Presentes", [
       new Date().toISOString(),
       gift.name,
-      `R$ ${gift.price.toFixed(2)}`,
+      gift.price === null ? "Valor livre" : `R$ ${gift.price.toFixed(2)}`,
       guestName || "Não informado",
     ]);
     return NextResponse.json({ ok: true });

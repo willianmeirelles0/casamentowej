@@ -3,8 +3,11 @@ export type Gift = {
   txid: string;
   name: string;
   description: string;
-  price: number;
+  /** null = sem valor fixo; o convidado escolhe quanto enviar no app do banco. */
+  price: number | null;
   image?: string;
+  /** Destaca o card ocupando a largura toda do grid (para o presente de valor livre). */
+  featured?: boolean;
 };
 
 export const GIFTS: Gift[] = [
@@ -64,5 +67,14 @@ export const GIFTS: Gift[] = [
     description: "Torne se sócio oficial da viagem dos noivos.",
     price: 1000,
     image: "/images/gifts/lua-de-mel.jpg",
+  },
+  {
+    id: "pix-da-intuicao",
+    txid: "PIXINTUICAO",
+    name: "Pix da Intuição",
+    description:
+      "Envie o que o seu coração mandar. Não se preocupe com o valor, o importante é que seja com amor.",
+    price: null,
+    featured: true,
   },
 ];

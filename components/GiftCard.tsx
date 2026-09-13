@@ -21,6 +21,8 @@ export default function GiftCard({ gift, given, onMarkGiven }: GiftCardProps) {
   const [copied, setCopied] = useState(false);
   const [marking, setMarking] = useState(false);
 
+  const featured = gift.featured ?? false;
+
   async function handleOpen() {
     setOpen(true);
     if (brCode || loading) return;
@@ -68,11 +70,11 @@ export default function GiftCard({ gift, given, onMarkGiven }: GiftCardProps) {
 
   return (
     <div
-      className={`flex flex-col justify-between rounded-2xl border border-gold/30 bg-cream p-6 transition-shadow hover:shadow-lg ${
-        given ? "opacity-60" : ""
-      }`}
+      className={`flex flex-col justify-between rounded-2xl border p-6 transition-shadow hover:shadow-lg ${
+        featured ? "border-gold/60 bg-gold/10 sm:p-10" : "border-gold/30 bg-cream"
+      } ${given ? "opacity-60" : ""}`}
     >
-      <div>
+      <div className={featured ? "mx-auto flex max-w-xl flex-col items-center text-center" : ""}>
         {gift.image && (
           <div className="relative -mx-6 -mt-6 mb-4 aspect-[1000/544] overflow-hidden rounded-t-2xl">
             <Image
@@ -84,9 +86,25 @@ export default function GiftCard({ gift, given, onMarkGiven }: GiftCardProps) {
             />
           </div>
         )}
-        <p className="font-serif text-lg font-semibold leading-snug text-brown-dark">{gift.name}</p>
-        <p className="mt-2 font-sans text-sm italic text-brown-dark/80">&ldquo;{gift.description}&rdquo;</p>
-        <p className="mt-4 font-serif text-2xl font-semibold text-gold">{currency.format(gift.price)}</p>
+        <p
+          className={
+            featured
+              ? "font-script text-3xl text-gold sm:text-4xl"
+              : "font-serif text-lg font-semibold leading-snug text-brown-dark"
+          }
+        >
+          {gift.name}
+        </p>
+        <p
+          className={`font-sans italic text-brown-dark/80 ${
+            featured ? "mt-3 text-base sm:text-lg" : "mt-2 text-sm"
+          }`}
+        >
+          &ldquo;{gift.description}&rdquo;
+        </p>
+        <p className="mt-4 font-serif text-2xl font-semibold text-gold">
+          {gift.price === null ? "Você escolhe o valor" : currency.format(gift.price)}
+        </p>
       </div>
 
       {given ? (
@@ -97,12 +115,18 @@ export default function GiftCard({ gift, given, onMarkGiven }: GiftCardProps) {
         <button
           type="button"
           onClick={handleOpen}
-          className="mt-5 rounded-full bg-brown px-5 py-2.5 font-sans text-sm font-medium text-cream transition-colors hover:bg-brown-dark"
+          className={`mt-5 rounded-full bg-brown px-5 py-2.5 font-sans text-sm font-medium text-cream transition-colors hover:bg-brown-dark ${
+            featured ? "mx-auto w-full max-w-xs" : ""
+          }`}
         >
           Presentear
         </button>
       ) : (
-        <div className="mt-5 flex flex-col items-center gap-3 border-t border-gold/20 pt-5">
+        <div
+          className={`mt-5 flex flex-col items-center gap-3 border-t border-gold/20 pt-5 ${
+            featured ? "mx-auto w-full max-w-xs" : ""
+          }`}
+        >
           {loading && <p className="font-sans text-sm text-brown-dark/70">Gerando QR code Pix...</p>}
           {error && <p className="font-sans text-sm text-red-700">{error}</p>}
           {brCode && (
