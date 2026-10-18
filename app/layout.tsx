@@ -1,5 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Playfair_Display, Great_Vibes, Inter } from "next/font/google";
+import { ExperienciaProvider } from "@/components/experiencia/AudioContext";
+import ConviteAbertura from "@/components/experiencia/ConviteAbertura";
+import PlayerMusica from "@/components/experiencia/PlayerMusica";
 import "./globals.css";
 
 const playfair = Playfair_Display({
@@ -39,7 +42,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${playfair.variable} ${greatVibes.variable} ${inter.variable}`}
     >
       <body>
-        <div id="site-content">{children}</div>
+        <ExperienciaProvider>
+          <ConviteAbertura />
+          <div id="site-content">{children}</div>
+          <PlayerMusica />
+        </ExperienciaProvider>
       </body>
     </html>
   );

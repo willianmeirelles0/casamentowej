@@ -1,7 +1,7 @@
 import BigDay from "@/components/BigDay";
 import Footer from "@/components/Footer";
 import GiftList from "@/components/GiftList";
-import Hero from "@/components/Hero";
+import HeroAquarela from "@/components/experiencia/HeroAquarela";
 import LocationSection from "@/components/LocationSection";
 import Navbar from "@/components/Navbar";
 import OurStory from "@/components/OurStory";
@@ -12,7 +12,7 @@ export default function Home() {
     <>
       <Navbar />
       <main>
-        <Hero />
+        <HeroAquarela />
         <OurStory />
         <BigDay />
         <LocationSection />
