@@ -53,6 +53,17 @@ export default function YouTubeEmbed({ videoId, title, className = "" }: YouTube
   const motivo = `video-${idIframe}`;
   const { pausarAutomaticamente, retomarAutomaticamente } = useAudioExperiencia();
   const leitor = useRef<LeitorYouTube | null>(null);
+  // Guarda as funções mais recentes em refs e mantém o efeito abaixo preso a [] (só roda uma
+  // vez). Se essas funções entrassem no array de dependências, qualquer mudança de
+  // identidade entre elas destruiria e tentaria recriar o player (YT.Player.destroy()
+  // remove o próprio <iframe> do DOM), e a recriação falha porque o elemento já não existe.
+  // era exatamente isso que fazia o vídeo sumir ao iniciar a música.
+  const pausarRef = useRef(pausarAutomaticamente);
+  const retomarRef = useRef(retomarAutomaticamente);
+  useEffect(() => {
+    pausarRef.current = pausarAutomaticamente;
+    retomarRef.current = retomarAutomaticamente;
+  });
 
   useEffect(() => {
     let cancelado = false;
@@ -63,9 +74,9 @@ export default function YouTubeEmbed({ videoId, title, className = "" }: YouTube
           onStateChange: (evento) => {
             if (!window.YT) return;
             if (evento.data === window.YT.PlayerState.PLAYING) {
-              pausarAutomaticamente(motivo);
+              pausarRef.current(motivo);
             } else if (evento.data === window.YT.PlayerState.PAUSED || evento.data === window.YT.PlayerState.ENDED) {
-              retomarAutomaticamente(motivo);
+              retomarRef.current(motivo);
             }
           },
         },
@@ -73,10 +84,10 @@ export default function YouTubeEmbed({ videoId, title, className = "" }: YouTube
     });
     return () => {
       cancelado = true;
-      retomarAutomaticamente(motivo);
+      retomarRef.current(motivo);
       leitor.current?.destroy?.();
     };
-  }, [idIframe, motivo, pausarAutomaticamente, retomarAutomaticamente]);
+  }, [idIframe, motivo]);
 
   return (
     <div className={`watercolor-frame relative aspect-[9/16] overflow-hidden bg-brown-dark ${className}`}>

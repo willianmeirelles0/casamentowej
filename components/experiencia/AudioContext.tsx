@@ -53,6 +53,11 @@ export function ExperienciaProvider({ children }: { children: ReactNode }) {
   const pausadoManualmente = useRef(false);
   const motivosPausa = useRef<Set<string>>(new Set());
   const tocandoAntesDaPausa = useRef(false);
+  const tocandoRef = useRef(false);
+
+  useEffect(() => {
+    tocandoRef.current = tocando;
+  }, [tocando]);
 
   useEffect(() => {
     try {
@@ -106,16 +111,19 @@ export function ExperienciaProvider({ children }: { children: ReactNode }) {
     }
   }, [tocando, tocar, pausar]);
 
+  // Lê tocandoRef (não o estado tocando) de propósito: assim a função mantém a mesma
+  // identidade entre renders e não derruba efeitos que dependem dela (como o player do
+  // YouTube, que destruiria e recriaria o iframe toda vez que a música começasse/parasse).
   const pausarAutomaticamente = useCallback(
     (motivo: string) => {
       const jaHaviaMotivo = motivosPausa.current.size > 0;
       motivosPausa.current.add(motivo);
-      if (!jaHaviaMotivo && tocando) {
+      if (!jaHaviaMotivo && tocandoRef.current) {
         tocandoAntesDaPausa.current = true;
         pausar(true);
       }
     },
-    [tocando, pausar],
+    [pausar],
   );
 
   const retomarAutomaticamente = useCallback(

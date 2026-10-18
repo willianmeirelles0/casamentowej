@@ -45,22 +45,24 @@ async function gerar() {
   // Final: a arte completa, nítida.
   await base.clone().sharpen().webp({ quality: 90 }).toFile(path.join(destino, "final.webp"));
 
-  // Máscaras de revelação (mancha orgânica): geradas uma única vez aqui como PNG, em vez de
+  // Máscaras de revelação (faixa de pincel): geradas uma única vez aqui como PNG, em vez de
   // um filtro SVG ao vivo no navegador. O feTurbulence/feDisplacementMap aplicado como
   // mask-image com mask-size animado (ver HeroAquarela.tsx) tem bugs de recorte em alguns
   // navegadores quando o filtro é recalculado em tempo real; "assar" o resultado como raster
   // evita isso por completo, e o componente só anima mask-size/mask-position (CSS puro) por
-  // cima desse raster estático.
-  const manchaSvg = (seed, deslocamento) =>
+  // cima desse raster estático. A forma é uma faixa que cobre da borda esquerda até uma borda
+  // direita irregular (a "pincelada"); o componente cresce a largura dessa faixa para pintar
+  // da esquerda para a direita.
+  const faixaSvg = (seed, deslocamento) =>
     `<svg xmlns="http://www.w3.org/2000/svg" width="480" height="480" viewBox="0 0 200 200">` +
     `<filter id="f" x="-50%" y="-50%" width="200%" height="200%"><feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="2" seed="${seed}" result="n"/>` +
     `<feDisplacementMap in="SourceGraphic" in2="n" scale="${deslocamento}"/></filter>` +
-    `<circle cx="100" cy="100" r="80" fill="#8a8a8a" filter="url(#f)"/>` +
-    `<circle cx="100" cy="100" r="68" fill="#fff" filter="url(#f)"/>` +
+    `<rect x="-20" y="-60" width="148" height="320" fill="#8a8a8a" filter="url(#f)"/>` +
+    `<rect x="-20" y="-60" width="140" height="320" fill="#fff" filter="url(#f)"/>` +
     `</svg>`;
 
-  await sharp(Buffer.from(manchaSvg(7, 34))).png().toFile(path.join(destino, "mascara-lavagem.png"));
-  await sharp(Buffer.from(manchaSvg(23, 38))).png().toFile(path.join(destino, "mascara-final.png"));
+  await sharp(Buffer.from(faixaSvg(7, 34))).png().toFile(path.join(destino, "mascara-lavagem.png"));
+  await sharp(Buffer.from(faixaSvg(23, 38))).png().toFile(path.join(destino, "mascara-final.png"));
 
   console.log("Camadas da aquarela geradas em", path.relative(raiz, destino));
 }

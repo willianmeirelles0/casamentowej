@@ -42,14 +42,19 @@ function medirDesempenho(): Promise<boolean> {
   });
 }
 
-// Mancha orgânica usada como máscara de revelação. O feTurbulence/feDisplacementMap é "assado"
-// uma única vez em build time (scripts/gerar-camadas-aquarela.mjs), virando um PNG estático:
-// recalcular esse filtro ao vivo dentro de um mask-image, com mask-size animado, tem recortes
-// retos em alguns navegadores quando a máscara é ampliada. Com um raster pronto, o componente
-// só anima mask-size/mask-position (CSS puro) por cima dele.
+// Faixa de pincel (borda direita irregular) usada como máscara de revelação. O
+// feTurbulence/feDisplacementMap é "assado" uma única vez em build time
+// (scripts/gerar-camadas-aquarela.mjs), virando um PNG estático: recalcular esse filtro ao
+// vivo dentro de um mask-image, com mask-size animado, tem recortes retos em alguns
+// navegadores quando a máscara é ampliada. Com um raster pronto, o componente só anima
+// mask-size (a largura da faixa, da esquerda para a direita) por cima dele.
 const MASCARA_LAVAGEM = 'url("/images/aquarela/mascara-lavagem.png")';
 const MASCARA_FINAL = 'url("/images/aquarela/mascara-final.png")';
-const ORIGEM_MANCHA = "54% 58%";
+// A faixa fica ancorada na borda esquerda (0%) e centralizada na vertical; só a largura
+// (primeiro valor do mask-size) cresce, pintando da esquerda para a direita como um pincel.
+const ORIGEM_MANCHA = "0% 50%";
+const LARGURA_INICIAL = "3% 400%";
+const LARGURA_FINAL = "190% 400%";
 
 type TextoRevelavelProps = {
   className?: string;
@@ -137,14 +142,14 @@ export default function HeroAquarela() {
       if (modo === "cheio") {
         tl.fromTo(
           lavagem.current,
-          { maskSize: "8% 8%", WebkitMaskSize: "8% 8%", opacity: 1 },
-          { maskSize: "260% 260%", WebkitMaskSize: "260% 260%", duration: 1.6, ease: "power2.out" },
+          { maskSize: LARGURA_INICIAL, WebkitMaskSize: LARGURA_INICIAL, opacity: 1 },
+          { maskSize: LARGURA_FINAL, WebkitMaskSize: LARGURA_FINAL, duration: 1.6, ease: "power1.inOut" },
           0.35,
         )
           .fromTo(
             final.current,
-            { maskSize: "8% 8%", WebkitMaskSize: "8% 8%" },
-            { maskSize: "280% 280%", WebkitMaskSize: "280% 280%", duration: 1.9, ease: "power2.out" },
+            { maskSize: LARGURA_INICIAL, WebkitMaskSize: LARGURA_INICIAL },
+            { maskSize: LARGURA_FINAL, WebkitMaskSize: LARGURA_FINAL, duration: 1.9, ease: "power1.inOut" },
             1.1,
           )
           .to(final.current, { opacity: 1, duration: 0.1 }, 1.1)
@@ -157,8 +162,8 @@ export default function HeroAquarela() {
       } else {
         tl.fromTo(
           final.current,
-          { maskSize: "8% 8%", WebkitMaskSize: "8% 8%" },
-          { maskSize: "280% 280%", WebkitMaskSize: "280% 280%", duration: 1.3, ease: "power2.out" },
+          { maskSize: LARGURA_INICIAL, WebkitMaskSize: LARGURA_INICIAL },
+          { maskSize: LARGURA_FINAL, WebkitMaskSize: LARGURA_FINAL, duration: 1.3, ease: "power1.inOut" },
           0.4,
         ).to(final.current, { opacity: 1, duration: 0.1 }, 0.4);
       }
@@ -187,8 +192,8 @@ export default function HeroAquarela() {
     maskRepeat: "no-repeat",
     WebkitMaskPosition: ORIGEM_MANCHA,
     maskPosition: ORIGEM_MANCHA,
-    WebkitMaskSize: "8% 8%",
-    maskSize: "8% 8%",
+    WebkitMaskSize: LARGURA_INICIAL,
+    maskSize: LARGURA_INICIAL,
   });
 
   return (

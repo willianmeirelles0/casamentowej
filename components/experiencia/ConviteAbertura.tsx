@@ -143,7 +143,7 @@ export default function ConviteAbertura() {
       ref={raiz}
       role="dialog"
       aria-label="Convite de casamento de Jéssica e Willian"
-      className="fixed inset-0 z-[100] grid h-[100svh] place-items-center overflow-hidden bg-cream"
+      className="fixed inset-0 z-[100] grid h-[100svh] place-items-center overflow-hidden bg-brown-dark"
     >
       <button
         type="button"
@@ -153,7 +153,7 @@ export default function ConviteAbertura() {
           iniciarMusica();
           void sair(true);
         }}
-        className="absolute right-3 top-[max(12px,env(safe-area-inset-top))] z-10 min-h-11 px-3 font-sans text-[11px] font-medium uppercase tracking-[0.22em] text-brown-dark/70"
+        className="absolute right-3 top-[max(12px,env(safe-area-inset-top))] z-10 min-h-11 px-3 font-sans text-[11px] font-medium uppercase tracking-[0.22em] text-cream/80"
       >
         Pular
       </button>
@@ -248,7 +248,7 @@ export default function ConviteAbertura() {
           </span>
         </span>
 
-        <span ref={toque} className="block animate-pulse font-sans text-[12px] font-medium uppercase tracking-[0.3em] text-brown-dark/80">
+        <span ref={toque} className="block animate-pulse font-sans text-[12px] font-medium uppercase tracking-[0.3em] text-cream/90">
           Toque para abrir
         </span>
       </button>
